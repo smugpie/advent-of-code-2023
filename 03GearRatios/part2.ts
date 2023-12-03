@@ -33,7 +33,10 @@ file.on('close', () => {
     x: number,
     value: string
   ): void {
-    const lineFragment = paddedSchematic[y].substr(x - 1, value.length + 2)
+    const lineFragment = paddedSchematic[y].substring(
+      x - 1,
+      x + value.length + 1
+    )
     if (hasAGearSymbol.test(lineFragment)) {
       gearSymbols[`${y},${x + lineFragment.indexOf('*') - 1}`].push(+value)
     }

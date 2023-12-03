@@ -21,7 +21,7 @@ const testSubstring = function (
   value: string,
   x: number
 ): boolean {
-  return isASymbol.test(line.substr(x - 1, value.length + 2))
+  return isASymbol.test(line.substring(x - 1, x + value.length + 1))
 }
 
 file.on('close', () => {
