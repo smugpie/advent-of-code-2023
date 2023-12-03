@@ -5,10 +5,12 @@ var file = readline.createInterface({
   input: fs.createReadStream('./input.txt')
 })
 
-let sum = 0;
+let sum = 0
 
-const getFirstAndLastDigitsFromArray = function (arrayOfNums: string[]): number {
-  return parseInt(`${arrayOfNums[0]}${arrayOfNums[arrayOfNums.length-1]}`, 10)
+const getFirstAndLastDigitsFromArray = function (
+  arrayOfNums: string[]
+): number {
+  return parseInt(`${arrayOfNums[0]}${arrayOfNums[arrayOfNums.length - 1]}`, 10)
 }
 
 const stripNonNumericCharacters = function (line: string): string[] {

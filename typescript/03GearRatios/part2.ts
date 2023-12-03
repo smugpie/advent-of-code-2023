@@ -5,8 +5,8 @@ var file = readline.createInterface({
   input: fs.createReadStream('./input.txt')
 })
 
-let schematic: string[] = [];
-let sum = 0;
+let schematic: string[] = []
+let sum = 0
 
 file.on('line', (line: string) => {
   if (line !== '') {
@@ -15,7 +15,7 @@ file.on('line', (line: string) => {
 })
 
 const hasAGearSymbol = /\*/
-let gearSymbols: {[key: string]: number[]} = {}
+let gearSymbols: { [key: string]: number[] } = {}
 
 file.on('close', () => {
   const paddedLine = Array(schematic[0].length).fill('.').join('')
@@ -28,8 +28,12 @@ file.on('close', () => {
     })
   })
 
-  const addValueToGearSymbol = function(y: number, x: number, value: string): void {
-    const lineFragment = paddedSchematic[y].substr(x - 1, value.length + 2);
+  const addValueToGearSymbol = function (
+    y: number,
+    x: number,
+    value: string
+  ): void {
+    const lineFragment = paddedSchematic[y].substr(x - 1, value.length + 2)
     if (hasAGearSymbol.test(lineFragment)) {
       gearSymbols[`${y},${x + lineFragment.indexOf('*') - 1}`].push(+value)
     }
@@ -41,9 +45,9 @@ file.on('close', () => {
       const [value] = match
       const { index: x, input } = match
       if (x && input) {
-        addValueToGearSymbol(y - 1, x, value);
-        addValueToGearSymbol(y, x, value);
-        addValueToGearSymbol(y + 1, x, value);
+        addValueToGearSymbol(y - 1, x, value)
+        addValueToGearSymbol(y, x, value)
+        addValueToGearSymbol(y + 1, x, value)
       }
     }
   })

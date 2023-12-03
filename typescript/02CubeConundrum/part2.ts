@@ -5,14 +5,13 @@ var file = readline.createInterface({
   input: fs.createReadStream('./input.txt')
 })
 
-let validGameSum = 0;
-
+let validGameSum = 0
 
 file.on('line', (line: string) => {
   if (line !== '') {
     const [, draws] = line.split(': ')
     const drawArray = draws.split('; ')
-    let cubeNumbers: {[key: string]: number} = {
+    let cubeNumbers: { [key: string]: number } = {
       red: 0,
       green: 0,
       blue: 0
