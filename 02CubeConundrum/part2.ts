@@ -23,7 +23,6 @@ file.on('line', (line: string) => {
         cubeNumbers[color] = Math.max(cubeNumbers[color], +number)
       }
     }
-    console.log(cubeNumbers)
     validGameSum += cubeNumbers.red * cubeNumbers.green * cubeNumbers.blue
   }
 })
