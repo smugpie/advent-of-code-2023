@@ -1,6 +1,8 @@
 import * as fs from 'fs'
 import * as readline from 'readline'
 
+type CubeColor = 'red' | 'green' | 'blue'
+
 var file = readline.createInterface({
   input: fs.createReadStream('./input.txt')
 })
@@ -17,11 +19,12 @@ file.on('line', (line: string) => {
       const cubes = draw.split(', ')
       for (const cube of cubes) {
         const [number, color] = cube.split(' ')
+        const cubeColor = color as CubeColor
         // only 12 red cubes, 13 green cubes, and 14 blue cubes?
         if (
-          (color === 'red' && +number > 12) ||
-          (color === 'green' && +number > 13) ||
-          (color === 'blue' && +number > 14)
+          (cubeColor === 'red' && +number > 12) ||
+          (cubeColor === 'green' && +number > 13) ||
+          (cubeColor === 'blue' && +number > 14)
         ) {
           isInvalidGame = true
         }
