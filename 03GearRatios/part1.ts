@@ -5,7 +5,7 @@ var file = readline.createInterface({
   input: fs.createReadStream('./input.txt')
 })
 
-let schematic: string[] = []
+const schematic: string[] = []
 let sum = 0
 
 file.on('line', (line: string) => {
