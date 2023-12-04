@@ -12,10 +12,10 @@ const getScore = function (
   cardArray: string[],
   winningNumbersArray: string[]
 ): number {
-  return winningNumbersArray.reduce((acc, cur) => {
-    if (cardArray.includes(cur)) acc += 1
-    return acc
-  }, 0)
+  return winningNumbersArray.reduce(
+    (acc, cur) => (cardArray.includes(cur) ? acc + 1 : acc),
+    0
+  )
 }
 
 file.on('line', (line: string) => {
