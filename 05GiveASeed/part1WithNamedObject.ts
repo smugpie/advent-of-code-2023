@@ -6,7 +6,7 @@ var file = readline.createInterface({
 })
 
 let seeds: number[]
-let locations: {[key: string]: number[][]}  = {
+let locations: { [key: string]: number[][] } = {
   'seed-to-soil': [],
   'soil-to-fertilizer': [],
   'fertilizer-to-water': [],
@@ -20,19 +20,19 @@ let currentMap: string
 file.on('line', (line: string) => {
   if (line.startsWith('seeds')) {
     const [, seedList] = line.split(': ')
-    seeds = seedList.split(' ').map(num => +num)
+    seeds = seedList.split(' ').map((num) => +num)
   } else if (line.indexOf('map') > -1) {
     currentMap = line.split(' ')[0]
   } else if (line !== '') {
-    locations[currentMap].push(line.split(' ').map(num => +num));
+    locations[currentMap].push(line.split(' ').map((num) => +num))
   }
 })
 
-const convertNumber = function(seed: number, map: string): number {
+const convertNumber = function (seed: number, map: string): number {
   let num = seed
-  locations[map].forEach(location => {
+  locations[map].forEach((location) => {
     const [dest, src, range] = location
-    if (seed >= src && seed < (src + range)) {
+    if (seed >= src && seed < src + range) {
       num = seed - src + dest
     }
   })
@@ -40,12 +40,17 @@ const convertNumber = function(seed: number, map: string): number {
 }
 
 file.on('close', () => {
-  let newSeeds = seeds.map(seed => convertNumber(seed, 'seed-to-soil'))
-  newSeeds = newSeeds.map(seed => convertNumber(seed, 'soil-to-fertilizer'))
-  newSeeds = newSeeds.map(seed => convertNumber(seed, 'fertilizer-to-water'))
-  newSeeds = newSeeds.map(seed => convertNumber(seed, 'water-to-light'))
-  newSeeds = newSeeds.map(seed => convertNumber(seed, 'light-to-temperature'))
-  newSeeds = newSeeds.map(seed => convertNumber(seed, 'temperature-to-humidity'))
-  newSeeds = newSeeds.map(seed => convertNumber(seed, 'humidity-to-location'))
-  console.log('Part 1 = ', newSeeds.reduce((acc, cur) => Math.min(acc, cur), Infinity))
+  let newSeeds = seeds.map((seed) => convertNumber(seed, 'seed-to-soil'))
+  newSeeds = newSeeds.map((seed) => convertNumber(seed, 'soil-to-fertilizer'))
+  newSeeds = newSeeds.map((seed) => convertNumber(seed, 'fertilizer-to-water'))
+  newSeeds = newSeeds.map((seed) => convertNumber(seed, 'water-to-light'))
+  newSeeds = newSeeds.map((seed) => convertNumber(seed, 'light-to-temperature'))
+  newSeeds = newSeeds.map((seed) =>
+    convertNumber(seed, 'temperature-to-humidity')
+  )
+  newSeeds = newSeeds.map((seed) => convertNumber(seed, 'humidity-to-location'))
+  console.log(
+    'Part 1 = ',
+    newSeeds.reduce((acc, cur) => Math.min(acc, cur), Infinity)
+  )
 })
