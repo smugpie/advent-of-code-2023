@@ -32,7 +32,6 @@ file.on('close', () => {
   let multiples = 1
   for (let { time, distance } of races) {
     let numberOfRecordsBroken = 0
-
     for (let pressTime = 1; pressTime < time; pressTime += 1) {
       const timeRemaining = time - pressTime
       const distanceCovered = pressTime * timeRemaining

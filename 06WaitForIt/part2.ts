@@ -41,5 +41,5 @@ file.on('close', () => {
     }
     multiples *= numberOfRecordsBroken
   }
-  console.log('Part 1 =', multiples)
+  console.log('Part 2 =', multiples)
 })

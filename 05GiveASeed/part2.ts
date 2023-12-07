@@ -33,8 +33,7 @@ file.on('line', (line: string) => {
     currentMap += 1
     locations[currentMap] = []
   } else if (line !== '') {
-    const arr = line.split(' ').map((num) => +num)
-    const [destination, start, distance] = arr
+    const [destination, start, distance] = line.split(' ').map((num) => +num)
     locations[currentMap].push({
       start,
       end: start + distance - 1,
