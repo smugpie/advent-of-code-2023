@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import * as readline from 'readline'
 
 var file = readline.createInterface({
-  input: fs.createReadStream('./input2.txt')
+  input: fs.createReadStream('./input.txt')
 })
 
 type Location = {
@@ -34,10 +34,11 @@ file.on('line', (line: string) => {
     locations[currentMap] = []
   } else if (line !== '') {
     const arr = line.split(' ').map((num) => +num)
+    const [destination, start, distance] = arr
     locations[currentMap].push({
-      start: arr[1],
-      end: arr[1] + arr[2],
-      delta: arr[0] - arr[1]
+      start,
+      end: start + distance - 1,
+      delta: destination - start
     })
   }
 })
@@ -81,29 +82,16 @@ const remapRange = function (range: Range, loc: Location): MappedRanges {
   return { unmapped: [range] }
 }
 
-const convertRanges = function (
-  ranges: Range[],
-  stage: Location[],
-  debug: boolean
-): Range[] {
+const convertRanges = function (ranges: Range[], stage: Location[]): Range[] {
   let mappedRanges: Range[] = []
   let finalUnmappedRanges: Range[] = []
   for (const range of ranges) {
     let unmappedRanges = [range]
     stage.forEach((mapping) => {
       if (unmappedRanges.length) {
-        if (debug)
-          console.log(
-            '---trying',
-            mapping,
-            'with unmapped ranges',
-            unmappedRanges
-          )
-
         const mappingResult = unmappedRanges.map((unmappedRange) =>
           remapRange(unmappedRange, mapping)
         )
-        if (debug) console.log('result', JSON.stringify(mappingResult))
         unmappedRanges = []
         mappingResult.forEach(({ mapped, unmapped }) => {
           mappedRanges = [...mappedRanges, ...(mapped || [])]
@@ -122,10 +110,8 @@ file.on('close', () => {
     let ranges: Range[] = [
       { start: seeds[j], end: seeds[j] + seeds[j + 1] - 1 }
     ]
-    console.log('considering', ranges, 'a distance of', seeds[j + 1])
-    locations.forEach((stage, idx) => {
-      ranges = convertRanges(ranges, stage, idx === 1)
-      console.log('!!! at the end of stage', idx, 'we have ', ranges)
+    locations.forEach((stage) => {
+      ranges = convertRanges(ranges, stage)
     })
     lowest = Math.min(
       lowest,

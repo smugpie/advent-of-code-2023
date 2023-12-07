@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import * as readline from 'readline'
 
 var file = readline.createInterface({
-  input: fs.createReadStream('./testinput.txt')
+  input: fs.createReadStream('./input2.txt')
 })
 
 type Location = {
@@ -26,7 +26,7 @@ file.on('line', (line: string) => {
     const arr = line.split(' ').map((num) => +num)
     locations[currentMap].push({
       start: arr[1],
-      end: arr[1] + arr[2],
+      end: arr[1] + arr[2] - 1,
       delta: arr[0] - arr[1]
     })
   }
@@ -47,7 +47,7 @@ file.on('close', () => {
   let lowest = Infinity
   for (let j = 0; j < seeds.length; j += 2) {
     let initialSeed = seeds[j]
-    let finalSeed = initialSeed + seeds[j + 1]
+    let finalSeed = initialSeed + seeds[j + 1] - 1
     console.time('this iteration')
     console.log(
       'considering',
@@ -59,7 +59,7 @@ file.on('close', () => {
     )
     for (
       let currentSeed = initialSeed;
-      currentSeed < finalSeed;
+      currentSeed <= finalSeed;
       currentSeed += 1
     ) {
       let newSeed = currentSeed
