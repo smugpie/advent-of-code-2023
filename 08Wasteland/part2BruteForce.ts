@@ -1,3 +1,5 @@
+// NB: This will not finish any time soon
+
 import * as fs from 'fs'
 import * as readline from 'readline'
 

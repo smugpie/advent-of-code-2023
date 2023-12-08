@@ -76,10 +76,22 @@ file.on('close', () => {
     }
   }
 
+  const isPrime = function (num: number): boolean {
+    for (let i = 2; i < num; i += 1) {
+      if (num % i === 0) return false
+    }
+    return true
+  }
+
+  // here we test that there is no variation in step counts when visiting a destination that ends in Z
+  // and we check that the step count is a multiple of the sequence of stepa
+  // and the number of times we loop through the sequence is a prime number
+  // so we don't have to calculate the least common multiple
   const invalidSourcesForThisExercise = sourcePlaces.filter((place) => {
     return !(
       map[place].sequenceCount === Math.round(map[place].sequenceCount) &&
-      map[place].sequenceCount === map[map[place].destination].sequenceCount
+      map[place].sequenceCount === map[map[place].destination].sequenceCount &&
+      isPrime(map[place].sequenceCount)
     )
   })
 
@@ -88,7 +100,6 @@ file.on('close', () => {
     return
   }
 
-  // sequenceCounts are all prime!
   const multiples = sourcePlaces.reduce(
     (acc, cur) => (acc *= map[cur].sequenceCount),
     1
