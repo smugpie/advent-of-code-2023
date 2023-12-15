@@ -15,8 +15,7 @@ file.on('line', (line: string) => {
 })
 
 const getHash = function (s: string): number {
-  let sArr = s.split('')
-  return sArr.reduce((acc, cur) => (acc + cur.charCodeAt(0)) * 17 % 256, 0)
+  return s.split('').reduce((acc, cur) => (acc + cur.charCodeAt(0)) * 17 % 256, 0)
 }
 
 file.on('close', () => {

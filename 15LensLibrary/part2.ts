@@ -25,9 +25,8 @@ const getHash = function (s: string): number {
 file.on('close', () => {
   steps.forEach(step => {
     const matches = step.match(/([a-z]+)([\-=])([0-9])*/)!
-    const label = matches[1]
-    const action = matches[2]
-    const val = +matches[3]
+    const [, label, action, stVal] = matches
+    const val = +stVal
     const boxNum = getHash(label)
     if (action === '-') {
       for (let i = 0; i < 256; i += 1) {
