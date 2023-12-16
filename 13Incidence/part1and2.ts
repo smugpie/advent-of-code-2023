@@ -35,7 +35,7 @@ const findDifferentCharacters = function (s1: string, s2: string): number {
   return sum
 }
 
-const findSymmetry = function (mirror: string[]): number {
+const findSymmetry = function (mirror: string[], expectedDifferences: number): number {
   for (let i = 1; i < mirror.length; i += 1) {
     let up = i - 1
     let down = i
@@ -47,22 +47,27 @@ const findSymmetry = function (mirror: string[]): number {
       down += 1
     }
 
-    if (differences === 1) {
+    if (differences === expectedDifferences) {
       return i
     }
   }
   return -1
 }
 
-file.on('close', () => {
+const getDifferenceScore = function (expectedDifferences: number): number {
   let sum = 0
   mirrors.forEach((mirror) => {
-    let pointFound = findSymmetry(mirror)
+    let pointFound = findSymmetry(mirror, expectedDifferences)
     if (pointFound > 0) sum += (100 * pointFound)
 
     const newMirror = transposeMirror(mirror)
-    pointFound = findSymmetry(newMirror)
+    pointFound = findSymmetry(newMirror, expectedDifferences)
     if (pointFound > 0) sum += pointFound
   })
-  console.log('Part 2 =', sum)
+  return sum
+}
+
+file.on('close', () => {
+  console.log('Part 1 =', getDifferenceScore(0))
+  console.log('Part 2 =', getDifferenceScore(1))
 })
