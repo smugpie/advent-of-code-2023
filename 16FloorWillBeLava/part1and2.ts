@@ -42,11 +42,11 @@ const getNewDirection = function (direction: string, mirror: string): string[] {
   return [direction]
 }
 
-const getNumberOfEnergisedTiles = function (initialBeams: Beam[]): number {
+const getNumberOfEnergisedTiles = function (initialBeam: Beam): number {
   const beamHistory = new Set()
   const energisedTiles = new Set()
 
-  let beams = initialBeams
+  let beams = [initialBeam]
 
   while (beams.length > 0) {
     const newBeams: Beam[] = []
@@ -77,31 +77,31 @@ file.on('close', () => {
   let sum = 0;
 
   for (let i = 0; i < grid.length; i += 1) {
-    const initialEastBeams: Beam[] = [{
+    const initialEastBeam = {
       coords: [i, -1],
       direction: 'e'
-    }]
-    sum = Math.max(sum, getNumberOfEnergisedTiles(initialEastBeams))
+    }
+    sum = Math.max(sum, getNumberOfEnergisedTiles(initialEastBeam))
     if (i === 0) {
       console.log('Part 1 =', sum)
     }
-    const initialWestBeams: Beam[] = [{
+    const initialWestBeam = {
       coords: [i, grid.length],
       direction: 'w'
-    }]
-    sum = Math.max(sum, getNumberOfEnergisedTiles(initialWestBeams))
+    }
+    sum = Math.max(sum, getNumberOfEnergisedTiles(initialWestBeam))
   }
   for (let i = 0; i < grid[0].length; i += 1) {
-    const initialSouthBeams: Beam[] = [{
+    const initialSouthBeam = {
       coords: [-1, i],
       direction: 's'
-    }]
-    sum = Math.max(sum, getNumberOfEnergisedTiles(initialSouthBeams))
-    const initialNorthBeams: Beam[] = [{
+    }
+    sum = Math.max(sum, getNumberOfEnergisedTiles(initialSouthBeam))
+    const initialNorthBeam = {
       coords: [grid[0].length, i],
       direction: 'n'
-    }]
-    sum = Math.max(sum, getNumberOfEnergisedTiles(initialNorthBeams))
+    }
+    sum = Math.max(sum, getNumberOfEnergisedTiles(initialNorthBeam))
   }
 
   console.log('Part 2 =', sum)
