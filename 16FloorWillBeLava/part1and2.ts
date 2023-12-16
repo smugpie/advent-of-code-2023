@@ -47,31 +47,28 @@ const getNumberOfEnergisedTiles = function (initialBeam: Beam): number {
   const energisedTiles = new Set()
 
   let beams = [initialBeam]
+  let beam
 
   while (beams.length > 0) {
-    const newBeams: Beam[] = []
-    beams.forEach((beam) => {
-      const newPosition = advancePosition(beam)
-      if (newPosition) {
+    beam = beams.pop()!
+    const newPosition = advancePosition(beam)
+    if (newPosition) {
+      const [y, x] = newPosition
+      energisedTiles.add(`${y}|${x}`)
+      const newDirections = getNewDirection(beam.direction, grid[y][x])
+      newDirections.forEach((newDirection) => {
         const [y, x] = newPosition
         energisedTiles.add(`${y}|${x}`)
-        const newDirections = getNewDirection(beam.direction, grid[y][x])
-        if (newDirections.length) {
-          newDirections.forEach((newDirection) => {
-            const [y, x] = newPosition
-            energisedTiles.add(`${y}|${x}`)
-            if (!beamHistory.has(`${y}|${x}|${newDirection}`)) {
-              newBeams.push({ coords: [y, x], direction: newDirection })
-              beamHistory.add(`${y}|${x}|${newDirection}`)
-            }
-          })
+        if (!beamHistory.has(`${y}|${x}|${newDirection}`)) {
+          beams.push({ coords: [y, x], direction: newDirection })
+          beamHistory.add(`${y}|${x}|${newDirection}`)
         }
-      }
-    })
-    beams = newBeams
+      })
+    }
   }
   return energisedTiles.size
 }
+
 
 file.on('close', () => {
   let sum = 0;
