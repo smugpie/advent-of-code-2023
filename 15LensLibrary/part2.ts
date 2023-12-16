@@ -5,7 +5,7 @@ var file = readline.createInterface({
   input: fs.createReadStream('./input.txt')
 })
 
-let sum = 0
+let focussingPower = 0
 let steps: string[] = []
 let boxes: Label[][] = Array(256).fill([])
 
@@ -18,8 +18,7 @@ file.on('line', (line: string) => {
 })
 
 const getHash = function (s: string): number {
-  let sArr = s.split('')
-  return sArr.reduce((acc, cur) => (acc + cur.charCodeAt(0)) * 17 % 256, 0)
+  return s.split('').reduce((acc, cur) => (acc + cur.charCodeAt(0)) * 17 % 256, 0)
 }
 
 file.on('close', () => {
@@ -29,7 +28,7 @@ file.on('close', () => {
     const val = +stVal
     const boxNum = getHash(label)
     if (action === '-') {
-      for (let i = 0; i < 256; i += 1) {
+      for (let i = 0; i < boxes.length; i += 1) {
         boxes[i] = [...boxes[i].filter(([thisLabel]) => label !== thisLabel)]
       }
     } else {
@@ -42,12 +41,11 @@ file.on('close', () => {
     }
   })
 
-  let focussingPower = 0
   for (let i = 0; i < boxes.length; i += 1) {
     for (let j = 0; j < boxes[i].length; j += 1) {
       const [, val] = boxes[i][j]
       focussingPower += (i + 1) * (j + 1) * val
     }
   }
-  console.log(focussingPower)
+  console.log('Part 2 =', focussingPower)
 })
