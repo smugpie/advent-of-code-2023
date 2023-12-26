@@ -6,7 +6,7 @@ var file = readline.createInterface({
 })
 
 type Coord = [number, number]
-type Path = [Coord[], string]
+type Path = [Coord[], string[]]
 type CalculatedPath = [Path, number]
 const grid: number[][] = []
 const pathsToCheck: Path[] = []
@@ -22,13 +22,25 @@ const isValidPath = function (pathString: string): boolean {
   return !/(uuuu|dddd|llll|rrrr)/.test(pathString)
 }
 
+const areValidPaths = function (pathStrings: string[], newDir: string): boolean {
+  console.log(areValidPaths);
+  for (let i = 0; i < pathStrings.length; i += 1) {
+    if (isValidPath(`${pathStrings[i]}${newDir}`)) {
+      return true
+    }
+  }
+  return false
+}
+
 let ct = 0
 
 const checkPaths = function (): CalculatedPath {
+  console.log('yy')
   while (pathsToCheck.length > 0) {
     const currentPath = pathsToCheck.shift()!
     addNewPaths(currentPath)
     ct += 1
+    console.log(ct)
   }
   return optimalRoute
 }
@@ -38,20 +50,20 @@ const addNewPaths = function (path: Path) {
   //console.log(pathString)
   const [y, x] = coords.at(-1)!
   // up
-  if (y > 0 && !pathString.endsWith('uuu')) {
+  if (y > 0) {
     checkNewPath(path, y - 1, x, `u`)
   }
   // left
-  if (x > 0 && !pathString.endsWith('lll')) {
+  if (x > 0) {
     checkNewPath(path, y, x - 1, `l`)
   }
   // right
-  if (x < grid[0].length - 1 && !pathString.endsWith('rrr')) {
+  if (x < grid[0].length - 1) {
     checkNewPath(path, y, x + 1, `r`)
   }
 
   // down
-  if (y < grid.length - 1 && !pathString.endsWith('ddd')) {
+  if (y < grid.length - 1) {
     checkNewPath(path, y + 1, x, `d`)
   }
 }
@@ -69,10 +81,11 @@ const checkNewPath = function (
   newX: number,
   newDir: string
 ) {
-  const [coords, pathString] = path
+  console.log('checking', path, newY, newX, newDir)
+  const [coords, pathStrings] = path
   const updatedPath: Path = [
     [...coords, [newY, newX]],
-    `${pathString}${newDir}`
+    pathStrings.map(ps => `${ps}${newDir}`)
   ]
   // have we reached the end
   if (newY === grid.length - 1 && newX === grid[grid.length - 1].length - 1) {
@@ -85,9 +98,15 @@ const checkNewPath = function (
   if (typeof heatLosses[newY][newX] !== 'undefined') {
     ;[, oldHeatloss] = heatLosses[newY][newX]
   }
-  if (oldHeatloss > newHeatLoss && isValidPath(`${pathString}${newDir}`)) {
+
+  const testValidPaths = areValidPaths(pathStrings, newDir)
+  if (oldHeatloss > newHeatLoss && testValidPaths) {
     heatLosses[newY][newX] = [updatedPath, newHeatLoss]
     pathsToCheck.push(updatedPath)
+  } else if (oldHeatloss === newHeatLoss && testValidPaths) {
+    const [path] = heatLosses[newY][newX]
+    const [coords, oldPathStrings] = updatedPath
+    heatLosses[newY][newX] = [[coords, [...oldPathStrings]], oldHeatloss]
   }
 }
 
@@ -96,15 +115,13 @@ const registerOptimalRoute = function (calculatedPath: CalculatedPath): void {
   if (optimalRoute) [, optimalHeatLoss] = optimalRoute
   const [, heatLoss] = calculatedPath
   if (heatLoss < optimalHeatLoss) {
-    optimalRoute = calculatedPath
   }
-}
 
-file.on('close', () => {
-  pathsToCheck.push([[[0, 0]], 'S'])
-  checkPaths()
-  const [path, heatLoss] = optimalRoute
-  const [, pathString] = path
-  console.log('Part 1: least heat loss =', heatLoss)
-  console.log(pathString)
-})
+  file.on('close', () => {
+    pathsToCheck.push([[[0, 0]], ['S']])
+    checkPaths()
+    const [path, heatLoss] = optimalRoute
+    const [, pathStrings] = path
+    console.log('Part 1: least heat loss =', heatLoss)
+    console.log(pathStrings)
+  })
